@@ -1,22 +1,24 @@
-# AWS IAM Lab — Screenshot Evidence
+# Screenshot evidence — AWS IAM Cloud Security Lab
 
-This directory documents the six **redacted evidence images** prepared from the user's AWS console captures and 15-page NextWork PDF export. The six redacted PNG image files are committed in this directory and displayed inline throughout the root README.
+This directory contains six screenshots from the AWS console and the NextWork project report. They are linked from the [main project walkthrough](../README.md), where each screenshot has an explanation of what it demonstrates.
 
-| Screenshot filename | Source | What it proves |
+| File | Evidence | Source |
 | --- | --- | --- |
-| `01-production-stop-denied.png` | EC2 console capture | Production `ec2:StopInstances` request denied (no applicable Allow) |
-| `02-development-stop-allowed.png` | EC2 console capture | Development stop operation successfully initiated |
-| `03-iam-policy-simulator.png` | IAM Policy Simulator capture | StopInstances allowed with development tag; DeleteTags denied |
-| `04-development-environment-tag.png` | NextWork PDF, page 5 | EC2 resource tag `Env=development` |
-| `05-account-alias-redacted.png` | NextWork PDF, page 8 | IAM account alias setup with account ID obscured |
-| `06-iam-user-created-redacted.png` | NextWork PDF, page 11 | Successful IAM user creation; credentials panel cropped out |
+| [01-production-stop-denied.png](01-production-stop-denied.png) | The intern's production EC2 stop request was denied | AWS EC2 console test |
+| [02-development-stop-allowed.png](02-development-stop-allowed.png) | The development EC2 stop operation was initiated | AWS EC2 console test |
+| [03-iam-policy-simulator.png](03-iam-policy-simulator.png) | `StopInstances` was allowed and `DeleteTags` was denied in the development-tag context | IAM Policy Simulator |
+| [04-development-environment-tag.png](04-development-environment-tag.png) | The development instance used the `Env=development` tag | NextWork report, page 5 |
+| [05-account-alias-redacted.png](05-account-alias-redacted.png) | AWS account alias setup | NextWork report, page 8 |
+| [06-iam-user-created-redacted.png](06-iam-user-created-redacted.png) | Successful IAM user creation | NextWork report, page 11 |
 
-## Evidence security
+## Interpretation
 
-The images have been cropped/redacted to exclude account IDs, EC2 instance IDs, IAM identity details, public DNS identifiers, encoded authorization failure messages and credential retrieval fields where relevant. Treat AWS sign-in URLs, credentials, account IDs, and session data as sensitive.
+The **production stop** was implicitly denied because no applicable identity-based policy allowed that action. The **tag modification** permission was explicitly denied by the policy. These are different IAM authorization outcomes.
 
-## Interpreting the results
+The simulator screenshot shows the `development` resource-tag condition, not a separate production simulation. The production authorization failure was captured in the live EC2 test.
 
-The production stop was **implicitly denied**, because no matching Allow applied. In contrast, the policy used an explicit deny to protect EC2 tag modification. The simulator only shows the `Env=development` context; the production denial is from the actual console test.
+## Publication precautions
 
-**Source report:** [NextWork Cloud Security with AWS IAM](https://nextwork.ai/kelvin-wii/docs/51a5fd24-7458-58a6-8653-9b90119a0e4a?utm_source=linkedin).
+The screenshots were prepared with sensitive identifiers and credential-related areas cropped or redacted where relevant. Before sharing revised screenshots, inspect them for account IDs, access keys, passwords, session details, network addresses, and encoded authorization messages.
+
+**Original guided project:** [NextWork — Cloud Security with AWS IAM](https://nextwork.ai/kelvin-wii/docs/51a5fd24-7458-58a6-8653-9b90119a0e4a).
