@@ -59,6 +59,10 @@ I launched **two Amazon EC2 instances** to represent separate NextWork workloads
 
 **What this demonstrates:** EC2 resource administration, environment separation, and the role of resource tags in security policy evaluation. The instance types and networking settings were not the security boundary tested in this lab; the IAM policy was.
 
+![EC2 development instance tag showing Env=development](screenshots/04-development-environment-tag.png)
+
+*Screenshot 1 — The development instance is labeled with the environment tag used by the IAM policy to determine which EC2 operations are permitted.*
+
 ### Step 2 — Build the custom JSON permission policy
 
 I created **`NextWorkDevEnvironmentPolicy`** with three core behaviors. First, an allow statement uses the condition `StringEquals` on `ec2:ResourceTag/Env` so a matching development-tagged resource can be managed by the allowed EC2 actions. Second, a separate `ec2:Describe*` allow enables EC2 inventory visibility. Third, an explicit deny blocks `ec2:CreateTags` and `ec2:DeleteTags`, reducing the risk of a user changing the environment labels that the policy depends on.
@@ -69,11 +73,19 @@ I created **`NextWorkDevEnvironmentPolicy`** with three core behaviors. First, a
 
 I configured an AWS account alias to provide a friendlier IAM-console sign-in URL. An account alias makes it easier for IAM users to locate the correct AWS sign-in page; it **does not grant any permissions**. Authentication and IAM authorization are still separate controls.
 
+![AWS IAM account alias configured for intern sign-in, account ID redacted](screenshots/05-account-alias-redacted.png)
+
+*Screenshot 2 — The AWS account alias provides a human-readable IAM sign-in URL. Account identifiers have been redacted.*
+
 ### Step 4 — Create the intern user and IAM group
 
 I created a dedicated IAM group for NextWork interns, attached the custom policy to the **group**, and added the new intern IAM user as a member. This lets administrators update permissions for the group rather than attaching identical policies to every intern individually.
 
 **What this demonstrates:** Centralized permissions and inheritance through group membership. The user should be granted only the console access needed for the learning scenario, and their credentials should be handled securely.
+
+![IAM user successfully created, credential retrieval area redacted](screenshots/06-iam-user-created-redacted.png)
+
+*Screenshot 3 — Confirmation of IAM user creation. The credential retrieval area and identifying details are excluded.*
 
 ### Step 5 — Verify console access as the intern
 
@@ -102,7 +114,7 @@ Important behavior:
 
 > **Scope note:** The lab policy uses `ec2:*` subject to a development-resource tag condition. That is broader than a production-grade least-privilege policy. In a real environment, I would replace `ec2:*` with a narrow list of required actions, review action-level resource support, and validate the complete permission boundary.
 
-> **Screenshot note:** Three redacted evidence images are in the project ZIP prepared in this chat but have not yet been uploaded to GitHub. Upload them to `screenshots/` separately to enable inline evidence here.
+> **Screenshot note:** All six screenshot embeds point to the `screenshots/` directory. Upload the six redacted PNG files using the exact filenames referenced here; GitHub will display each image in this README automatically after the upload commit.
 
 ## Validation and results
 
@@ -115,19 +127,25 @@ Important behavior:
 
 ### 1. Production instance — stopping denied
 
-_Screenshot available in the project package; upload `screenshots/01-production-stop-denied.png` to display the redacted console evidence here._
+![EC2 stop attempt denied for production instance](screenshots/01-production-stop-denied.png)
+
+*Screenshot 4 — The intern receives an authorization failure when attempting to stop the production EC2 instance. AWS does not find an applicable identity-based Allow.*
 
 The intern's attempt to stop the production EC2 instance returned an authorization error. This verified that the policy did not permit the tested production operation.
 
 ### 2. Development instance — stopping allowed
 
-_Screenshot available in the project package; upload `screenshots/02-development-stop-allowed.png` to display the redacted EC2 confirmation here._
+![EC2 development instance enters stopping state while production remains running](screenshots/02-development-stop-allowed.png)
+
+*Screenshot 5 — The same intern successfully initiates stopping the development instance. The production instance remains running.*
 
 AWS initiated a stop operation on the development instance. The screenshot also shows the production instance remaining in a running state.
 
 ### 3. IAM Policy Simulator — permission validation
 
-_Screenshot available in the project package; upload `screenshots/03-iam-policy-simulator.png` to display the redacted simulation result here._
+![IAM Policy Simulator showing StopInstances allowed and DeleteTags denied](screenshots/03-iam-policy-simulator.png)
+
+*Screenshot 6 — The simulator permits `StopInstances` for the development-tagged instance context and denies `DeleteTags`; no live EC2 action is performed.*
 
 In the simulator, I set `ec2:ResourceTag/Env` to `development`. The `StopInstances` action was allowed and `DeleteTags` was denied. This was a safer way to check these actions than repeating disruptive operations on live instances. **This screenshot does not show a separate simulation of production's stop permission; that outcome was demonstrated by the actual console test above.**
 
@@ -139,7 +157,7 @@ The [15-page NextWork walkthrough](https://nextwork.ai/kelvin-wii/docs/51a5fd24-
 - **AWS account alias** (PDF page 8): the friendlier IAM sign-in alias with the numeric account ID redacted.
 - **IAM user creation** (PDF page 11): successful onboarding, with the credential retrieval area removed.
 
-These complement the three original test images: production StopInstances denied, development StopInstances allowed, and the IAM Policy Simulator showing an allowed and a denied action. **The six prepared PNGs are not yet uploaded to this repository; the README deliberately avoids broken image embeds until they are committed.**
+These complement the three permission-validation screenshots below. The image links are embedded at the relevant project steps and will display automatically once the six PNG files have been committed into the `screenshots/` directory.
 
 ## Security lessons learned
 
@@ -175,7 +193,13 @@ aws-iam-cloud-security-lab/
 ├── policies/
 │   └── NextWorkDevEnvironmentPolicy-example.json
 ├── screenshots/
-│   └── README.md  # Evidence index; image uploads pending
+│   ├── README.md
+│   ├── 01-production-stop-denied.png
+│   ├── 02-development-stop-allowed.png
+│   ├── 03-iam-policy-simulator.png
+│   ├── 04-development-environment-tag.png
+│   ├── 05-account-alias-redacted.png
+│   └── 06-iam-user-created-redacted.png
 └── tests/
     └── permission-validation.md
 ```
@@ -185,4 +209,4 @@ aws-iam-cloud-security-lab/
 **Project:** [Cloud Security with AWS IAM — NextWork](https://nextwork.ai/projects/51a5fd24-7458-58a6-8653-9b90119a0e4a)  
 **Author:** Kelvin Westbrook II
 
-*Six screenshots were sanitized and packaged for upload; their image binaries are not yet part of this repository. Never publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
+*The six screenshots have been prepared with sensitive data redacted; the image references become visible on GitHub once the PNG files are uploaded. Never publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
