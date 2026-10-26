@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 530" role="img" aria-labelledby="t d">
+<title id="t">AWS IAM EC2 tag-based access control</title><desc id="d">Intern IAM user inherits a policy via an interns group. The policy allows StopInstances for development-tagged EC2 and does not allow StopInstances for production-tagged EC2. Simulator checks permitted and denied actions.</desc>
+<rect width="1100" height="530" rx="24" fill="#f6f8fb"/>
+<text x="550" y="49" text-anchor="middle" fill="#152c49" font-size="27" font-family="Arial,sans-serif" font-weight="bold">AWS IAM Cloud Security Lab</text>
+<text x="550" y="79" text-anchor="middle" fill="#506477" font-size="16" font-family="Arial,sans-serif">Policy inheritance · EC2 environment tags · permission validation</text>
+<rect x="38" y="145" width="190" height="92" rx="13" fill="#fff" stroke="#567a9d" stroke-width="2"/>
+<text x="133" y="181" fill="#183d60" font-size="19" text-anchor="middle" font-family="Arial" font-weight="bold">Intern IAM user</text>
+<text x="133" y="207" fill="#506477" font-size="14" text-anchor="middle" font-family="Arial">Test identity</text>
+<rect x="285" y="145" width="200" height="92" rx="13" fill="#fff" stroke="#567a9d" stroke-width="2"/>
+<text x="385" y="181" fill="#183d60" font-size="19" text-anchor="middle" font-family="Arial" font-weight="bold">Interns group</text>
+<text x="385" y="207" fill="#506477" font-size="14" text-anchor="middle" font-family="Arial">Attached IAM policy</text>
+<rect x="543" y="145" width="220" height="92" rx="13" fill="#fff" stroke="#567a9d" stroke-width="2"/>
+<text x="653" y="178" fill="#183d60" font-size="19" text-anchor="middle" font-family="Arial" font-weight="bold">Custom policy</text>
+<text x="653" y="205" fill="#506477" font-size="14" text-anchor="middle" font-family="Arial">Condition: Env tag</text>
+<g stroke="#66859f" stroke-width="3" fill="none"><path d="M228 191 H285"/><path d="M485 191 H543"/><path d="M763 191 H795 V150 H822"/><path d="M795 191 V294 H822"/><path d="M653 237 V420"/></g>
+<rect x="822" y="108" width="248" height="110" rx="13" fill="#e8f7ec" stroke="#2c9458" stroke-width="2"/>
+<text x="946" y="141" text-anchor="middle" fill="#126636" font-size="18" font-family="Arial" font-weight="bold">Development EC2</text>
+<text x="946" y="168" text-anchor="middle" fill="#126636" font-size="15" font-family="Arial">Env=development</text>
+<text x="946" y="194" text-anchor="middle" fill="#126636" font-size="16" font-family="Arial">StopInstances: ALLOWED</text>
+<rect x="822" y="253" width="248" height="110" rx="13" fill="#fff0f0" stroke="#c54949" stroke-width="2"/>
+<text x="946" y="285" text-anchor="middle" fill="#862a2a" font-size="18" font-family="Arial" font-weight="bold">Production EC2</text>
+<text x="946" y="312" text-anchor="middle" fill="#862a2a" font-size="15" font-family="Arial">Env=production</text>
+<text x="946" y="339" text-anchor="middle" fill="#862a2a" font-size="16" font-family="Arial">StopInstances: DENIED</text>
+<rect x="486" y="420" width="334" height="82" rx="13" fill="#edf0fb" stroke="#6f79ba" stroke-width="2"/>
+<text x="653" y="453" text-anchor="middle" fill="#343f80" font-size="18" font-family="Arial" font-weight="bold">IAM Policy Simulator</text>
+<text x="653" y="477" text-anchor="middle" fill="#424975" font-size="14" font-family="Arial">Non-disruptive action validation</text>
+<text x="38" y="489" fill="#637588" font-size="13" font-family="Arial">Conceptual authorization flow • Not an AWS network topology</text>
+</svg>
