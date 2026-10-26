@@ -1,36 +1,41 @@
 # IAM Permission Validation
 
-This records **observed** results from the NextWork AWS IAM lab. The example JSON policy is reconstructed from the simulator screenshot, **not exported from AWS**.
+This document records the results of the AWS IAM lab. **Live EC2 tests** were performed while signed in as the intern IAM user; **Policy Simulator tests** were separate, non-disruptive checks.
 
-## Setup
+## Test setup
 
-- Identity: test intern IAM user, member of an interns IAM group
-- Two EC2 instances tagged `Env=development` and `Env=production`
-- Policy: [NextWorkDevEnvironmentPolicy-example.json](../policies/NextWorkDevEnvironmentPolicy-example.json)
+- **Identity:** Intern IAM user, member of the NextWork interns group
+- **Resources:** Two EC2 instances tagged `Env=development` and `Env=production`
+- **Permissions:** Group-attached IAM policy; see the [reconstructed policy example](../policies/NextWorkDevEnvironmentPolicy-example.json)
+- **Evidence:** Six redacted images in the [screenshots folder](../screenshots/README.md)
 
-## Observed tests
+> **Policy provenance:** The JSON example was reconstructed from the lab documentation and simulator screenshot. It is **not** an export of the deployed AWS policy.
 
-| Test | Method | Expected | Observed |
-| --- | --- | --- | --- |
-| Stop development instance | Intern session in EC2 console | Allow | **Allowed** — EC2 transitioned to `Stopping` |
-| Stop production instance | Intern session in EC2 console | Deny | **Denied** — no identity-based policy allowed `ec2:StopInstances` |
-| StopInstances with development tag | IAM Policy Simulator | Allow | **Allowed** |
-| DeleteTags | IAM Policy Simulator | Deny | **Denied** |
+## Observed results
 
-## Interpretation and limitations
+| Action and target | Test method | Expected | Observed | Evidence |
+| --- | --- | --- | --- | --- |
+| `ec2:StopInstances` on development EC2 | Signed-in intern, EC2 console | Allow | **Allowed**; instance entered `Stopping` | [Development stop](../screenshots/02-development-stop-allowed.png) |
+| `ec2:StopInstances` on production EC2 | Signed-in intern, EC2 console | Deny | **Denied**; no matching identity-based Allow | [Production denial](../screenshots/01-production-stop-denied.png) |
+| `ec2:StopInstances` with `ec2:ResourceTag/Env=development` | IAM Policy Simulator | Allow | **Allowed** | [Simulator](../screenshots/03-iam-policy-simulator.png) |
+| `ec2:DeleteTags` with the simulator's development context | IAM Policy Simulator | Deny | **Denied** | [Simulator](../screenshots/03-iam-policy-simulator.png) |
 
-- The production stop was **implicitly denied**, not blocked by an explicit `Deny` on that operation.
-- `ec2:CreateTags` and `ec2:DeleteTags` were expressly denied.
-- The simulator screenshot used `ec2:ResourceTag/Env=development`. There is **no evidence here of a separate simulator run** using `Env=production`; production denial came from the live EC2 console test.
-- The example policy uses `ec2:*`, which is broader than a production-grade least-privilege policy. Replace it with necessary actions and verify condition-key support before real deployment.
-- The live development test changed the EC2 instance state. For routine permission checks, prefer the simulator.
+## Findings
 
-## Screenshot evidence
+1. **Development and production behaved differently.** The intern could stop the development instance, while the production stop attempt was blocked.
+2. **Production stopping was implicitly denied.** No matching policy statement granted `ec2:StopInstances` for production. This differs from an explicit `Deny`.
+3. **Tag modification was explicitly denied.** The example policy blocks `ec2:CreateTags` and `ec2:DeleteTags`, helping prevent changes to the labels used for access decisions.
+4. **Simulation reduced operational impact.** The live development test did change the EC2 instance state, whereas the simulator tested selected authorization decisions without stopping an instance.
 
-Three redacted screenshots were prepared for this project but are not yet uploaded here:
+## Scope and limitations
 
-1. `screenshots/01-production-stop-denied.png` — authorization failure from production stop
-2. `screenshots/02-development-stop-allowed.png` — successful development stop initiation
-3. `screenshots/03-iam-policy-simulator.png` — allowed StopInstances / denied DeleteTags
+- The simulator screenshot uses the `development` tag context. It does **not** show a separate production-tag simulation; the production denial is evidenced by the live EC2 test.
+- The reconstructed policy contains `ec2:*` in a conditional Allow. This is **not** a production-grade least-privilege design. Individual EC2 actions differ in resource and condition-key support and require validation.
+- These results demonstrate the **tested actions**, not a comprehensive guarantee that all production changes are blocked.
+- The screenshots are documentation evidence, not an automated test suite.
 
-Review images for account IDs, usernames, sign-in links, public network information and tokens before publishing.
+## Screenshot index
+
+The [six screenshot files](../screenshots/README.md) document the environment tag, account alias, IAM user creation, both EC2 stop tests, and the IAM Policy Simulator. They are already committed and embedded in the [main README](../README.md).
+
+**Security note:** Review screenshots and policies for credentials, AWS account identifiers, session data, and other sensitive details before any future public uploads.
