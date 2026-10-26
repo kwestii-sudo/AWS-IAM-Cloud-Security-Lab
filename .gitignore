@@ -1,0 +1,13 @@
+# Never commit credentials or local secrets
+.env
+.env.*
+.aws/
+*credentials*
+*secret*
+*.pem
+*.p12
+*.pfx
+*.key
+*accessKeys*.csv
+*new_user_credentials*.csv
+.DS_Store
