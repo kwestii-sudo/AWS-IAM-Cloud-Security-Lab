@@ -1,8 +1,8 @@
 # AWS IAM Lab — Screenshot Evidence
 
-This directory documents the six **redacted evidence images** prepared from the user's AWS console captures and 15-page NextWork PDF export. The image binaries are ready for upload from the accompanying ZIP but **have not yet been added to this repository**.
+This directory documents the six **redacted evidence images** prepared from the user's AWS console captures and 15-page NextWork PDF export. The six redacted PNG image files are committed in this directory and displayed inline throughout the root README.
 
-| Filename to upload | Source | What it proves |
+| Screenshot filename | Source | What it proves |
 | --- | --- | --- |
 | `01-production-stop-denied.png` | EC2 console capture | Production `ec2:StopInstances` request denied (no applicable Allow) |
 | `02-development-stop-allowed.png` | EC2 console capture | Development stop operation successfully initiated |
