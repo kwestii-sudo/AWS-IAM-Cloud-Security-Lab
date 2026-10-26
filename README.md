@@ -114,7 +114,7 @@ Important behavior:
 
 > **Scope note:** The lab policy uses `ec2:*` subject to a development-resource tag condition. That is broader than a production-grade least-privilege policy. In a real environment, I would replace `ec2:*` with a narrow list of required actions, review action-level resource support, and validate the complete permission boundary.
 
-> **Screenshot note:** All six screenshot embeds point to the `screenshots/` directory. Upload the six redacted PNG files using the exact filenames referenced here; GitHub will display each image in this README automatically after the upload commit.
+> **Screenshot evidence:** All six redacted PNGs are saved in the `screenshots/` directory and embedded directly alongside their corresponding lab steps below.
 
 ## Validation and results
 
@@ -157,7 +157,7 @@ The [15-page NextWork walkthrough](https://nextwork.ai/kelvin-wii/docs/51a5fd24-
 - **AWS account alias** (PDF page 8): the friendlier IAM sign-in alias with the numeric account ID redacted.
 - **IAM user creation** (PDF page 11): successful onboarding, with the credential retrieval area removed.
 
-These complement the three permission-validation screenshots below. The image links are embedded at the relevant project steps and will display automatically once the six PNG files have been committed into the `screenshots/` directory.
+These complement the three permission-validation screenshots below. All six images are embedded next to the corresponding project steps.
 
 ## Security lessons learned
 
@@ -209,4 +209,4 @@ aws-iam-cloud-security-lab/
 **Project:** [Cloud Security with AWS IAM — NextWork](https://nextwork.ai/projects/51a5fd24-7458-58a6-8653-9b90119a0e4a)  
 **Author:** Kelvin Westbrook II
 
-*The six screenshots have been prepared with sensitive data redacted; the image references become visible on GitHub once the PNG files are uploaded. Never publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
+*All six screenshots were redacted and committed in `screenshots/`. Never publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
