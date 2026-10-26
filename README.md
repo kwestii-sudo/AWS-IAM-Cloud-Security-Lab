@@ -131,6 +131,16 @@ _Screenshot available in the project package; upload `screenshots/03-iam-policy-
 
 In the simulator, I set `ec2:ResourceTag/Env` to `development`. The `StopInstances` action was allowed and `DeleteTags` was denied. This was a safer way to check these actions than repeating disruptive operations on live instances. **This screenshot does not show a separate simulation of production's stop permission; that outcome was demonstrated by the actual console test above.**
 
+## Additional evidence extracted from the NextWork PDF
+
+The [15-page NextWork walkthrough](https://nextwork.ai/kelvin-wii/docs/51a5fd24-7458-58a6-8653-9b90119a0e4a?utm_source=linkedin) provided three additional screenshot artifacts beyond the permission tests. I prepared public-safe redacted images, documented in [screenshots/README.md](screenshots/README.md):
+
+- **EC2 development tag** (PDF page 5): `Env=development`, the resource tag evaluated by the IAM policy.
+- **AWS account alias** (PDF page 8): the friendlier IAM sign-in alias with the numeric account ID redacted.
+- **IAM user creation** (PDF page 11): successful onboarding, with the credential retrieval area removed.
+
+These complement the three original test images: production StopInstances denied, development StopInstances allowed, and the IAM Policy Simulator showing an allowed and a denied action. **The six prepared PNGs are not yet uploaded to this repository; the README deliberately avoids broken image embeds until they are committed.**
+
 ## Security lessons learned
 
 - **IAM groups centralize permission administration.** Assigning permissions to the intern group reduces the need to manage each user's policy separately.
@@ -164,6 +174,8 @@ aws-iam-cloud-security-lab/
 │   └── aws-iam-access-control.svg
 ├── policies/
 │   └── NextWorkDevEnvironmentPolicy-example.json
+├── screenshots/
+│   └── README.md  # Evidence index; image uploads pending
 └── tests/
     └── permission-validation.md
 ```
@@ -173,4 +185,4 @@ aws-iam-cloud-security-lab/
 **Project:** [Cloud Security with AWS IAM — NextWork](https://nextwork.ai/projects/51a5fd24-7458-58a6-8653-9b90119a0e4a)  
 **Author:** Kelvin Westbrook II
 
-*Screenshots have been trimmed or redacted to reduce exposure of AWS identifiers and sign-in details. Do not publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
+*Six screenshots were sanitized and packaged for upload; their image binaries are not yet part of this repository. Never publish temporary passwords, access keys, account IDs, or unreviewed authorization messages.*
